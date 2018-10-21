@@ -40,6 +40,19 @@ namespace twozerofoureight
             return board;
         }
 
+        public int Getscore()
+        {
+            int score1 = 0;
+            foreach(int num in board)
+            {
+                if (num != 0)
+                {
+                    score1 += num;
+                }
+            }
+            return score1;
+        }
+
         private void AddRandomSlot()
         {
             while (true)
@@ -51,6 +64,7 @@ namespace twozerofoureight
                     board[x, y] = 2;
                     return;
                 }
+                
             }
         }
 
