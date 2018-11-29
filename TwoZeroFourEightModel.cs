@@ -31,8 +31,8 @@ namespace twozerofoureight
                 }
             }
             rand = new Random();
-            board = Random(board);
-            NotifyAll();
+            // initialize board
+            HandleChanges();
         }
 
         public int[,] GetBoard()
@@ -40,19 +40,32 @@ namespace twozerofoureight
             return board;
         }
 
-        private int[,] Random(int[,] input)
+        public int Getscore()
+        {
+            int score1 = 0;
+            foreach(int num in board)
+            {
+                if (num != 0)
+                {
+                    score1 += num;
+                }
+            }
+            return score1;
+        }
+
+        private void AddRandomSlot()
         {
             while (true)
             {
                 int x = rand.Next(boardSize);
                 int y = rand.Next(boardSize);
-                if (input[x, y] == 0)
+                if (board[x, y] == 0)
                 {
-                    input[x, y] = 2;
-                    break;
+                    board[x, y] = 2;
+                    return;
                 }
+                
             }
-            return input;
         }
 
         // Perform shift and merge to the left of the given array.
@@ -91,13 +104,13 @@ namespace twozerofoureight
             return changed;
         }
 
-        protected void HandleChanges(bool changed)
+        protected void HandleChanges(bool changed = true)
         {
             // if the board has changed, add a new number
             // and notify all views
             if (changed)
             {
-                board = Random(board);
+                AddRandomSlot();
                 NotifyAll();
             }
         }
@@ -192,6 +205,63 @@ namespace twozerofoureight
                 }
             }
             HandleChanges(changed);
+        }
+
+        public bool gameoverBox()
+        {
+            for(int i=0;i< boardSize; i++)
+            {
+                for(int j = 0; j < boardSize; j++)
+                {
+                    if (board[i, j] == 0)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            int tmp;
+            for(int i = 0; i < boardSize; i++)
+            {
+                for(int j = 0; j < boardSize; j++)
+                {
+                    tmp = board[i, j];
+                    if (i - 1 >= 0)
+                    {
+                        if(tmp==board[i-1,j])
+                        {
+                            return false;
+                        }
+                    }
+                    if (i + 1 <= 3)
+                    {
+                        if (tmp == board[i+1, j])
+                        {
+                            return false;
+                        }
+                    }
+                    if (j - 1 >= 0)
+                    {
+                        if (tmp == board[i,j-1])
+                        {
+                            return false;
+                        }
+                    }
+                    if (j + 1 >= 0)
+                    {
+                        if (tmp == board[i, j+1])
+                        {
+                             return false;
+                        }
+                    }
+                    
+
+
+                }
+               
+            }
+            return true;
+
         }
     }
 }
